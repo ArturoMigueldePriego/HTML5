@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Tu marca es un NPC?</title>
+
+  <link rel="stylesheet" href="navbar.css">
+
+  <style>
+    /* Carga de Fuentes desde la carpeta local 'fonts/' */
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* Reset y Tipografía por Defecto */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #000000;
+    }
+
+    body {
+      font-family: 'Unbounded', sans-serif;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* CONTENEDOR PRINCIPAL: Define el ancho constante de la página */
+    .page-container {
+      width: 100%;
+      max-width: 600px; /* Ancho constante unificado para PC */
+      background-color: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Clase utilitaria para secciones en Montserrat */
+    .font-montserrat {
+      font-family: 'Montserrat', sans-serif !important;
+    }
+
+    /* Franjas Deslizantes / Marquee */
+    .marquee-bar {
+      width: 100%;
+      background-color: #ffeb00;
+      color: #000000;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 6px 0;
+      font-weight: 900;
+      font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+      border-top: 2px solid #000;
+      border-bottom: 2px solid #000;
+    }
+
+    .marquee-content {
+      display: inline-block;
+      animation: marquee 12s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-pink {
+      background-color: #ff007a;
+      color: #ffffff;
+    }
+
+    /* --- BLOQUE 1: HEADER & TITLE --- */
+    .hero-section {
+      text-align: center;
+      padding: 30px 20px 20px;
+      width: 100%;
+    }
+
+    .hero-banner-container {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero-banner-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .hero-clickable-overlay {
+      position: absolute;
+      bottom: 0%;
+      left: 25%;
+      width: 50%;
+      height: 28%;
+      cursor: pointer;
+      z-index: 10;
+      text-decoration: none;
+    }
+
+    .intro-text-unbounded {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 3vw, 1.05rem);
+      font-weight: 700;
+      text-align: center;
+      margin-top: 30px;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .conclusion-text-unbounded {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 3vw, 1.05rem);
+      font-weight: 700;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 25px;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    /* Cuadro con BORDE BLANCO */
+    .feeling-box {
+      position: relative;
+      background-color: #000;
+      border: 1.5px solid #ffffff;
+      padding: clamp(15px, 4vw, 22px) clamp(12px, 3.5vw, 20px);
+      margin: 0 auto;
+      text-align: left;
+      width: 100%;
+    }
+
+    /* VÉRTICES TURQUESAS (#2bbbb0) */
+    .feeling-box::before,
+    .feeling-box::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #2bbbb0;
+      z-index: 2;
+    }
+    .feeling-box::before { top: -4px; left: -4px; }
+    .feeling-box::after { top: -4px; right: -4px; }
+
+    .feeling-box-corners::before,
+    .feeling-box-corners::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #2bbbb0;
+      z-index: 2;
+    }
+    .feeling-box-corners::before { bottom: -4px; left: -4px; }
+    .feeling-box-corners::after { bottom: -4px; right: -4px; }
+
+    .feeling-box ul {
+      list-style: none;
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: clamp(0.78rem, 2.5vw, 0.85rem);
+      line-height: 1.8;
+      color: #ffffff;
+    }
+
+    .feeling-box ul li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .feeling-box ul li::before {
+      content: "";
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      background-color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    /* --- BLOQUE 2: IMAGEN NPC --- */
+    .antiman1-section {
+      width: 100%;
+      text-align: center;
+      padding: 10px 20px 20px;
+      background-color: #000000;
+    }
+
+    .npc-main-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* --- BLOQUE 3: ANTIMAN 4 & SOLUCIÓN --- */
+    .solution-section {
+      width: 100%;
+      padding: 20px 20px 10px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .antiman4-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .antiman4-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .nace-text-right {
+      position: absolute;
+      bottom: 12px;
+      right: 15px;
+      font-size: clamp(0.95rem, 3vw, 1.15rem);
+      font-weight: 900;
+      text-align: right;
+      line-height: 1.25;
+    }
+
+    .nace-text-right span {
+      color: #ffeb00;
+    }
+
+    .tilted-marquee {
+      transform: rotate(-2deg);
+      width: 108%;
+      margin: 25px -4% 30px;
+    }
+
+    /* --- BLOQUE 4: LO QUE ENCONTRARÁS AQUÍ --- */
+    .found-section {
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .found-section h3 {
+      font-size: clamp(1.1rem, 3.5vw, 1.3rem);
+      font-weight: 900;
+    }
+
+    .found-content {
+      display: grid;
+      grid-template-columns: 1fr clamp(90px, 22vw, 120px);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .found-text {
+      font-size: clamp(0.78rem, 2.5vw, 0.85rem);
+      line-height: 1.5;
+    }
+
+    .found-text span.highlight-teal { color: #2bbbb0; font-weight: 700; }
+
+    .orion-old-wrapper {
+      position: relative;
+    }
+
+    .orion-old-img {
+      width: 100%;
+      height: auto;
+    }
+
+    .pero-title-left {
+      font-size: clamp(1.8rem, 6vw, 2.3rem);
+      font-weight: 900;
+      color: #2bbbb0;
+      text-align: left;
+      margin-top: 15px;
+      letter-spacing: 1px;
+    }
+
+    .question-concept-text {
+      font-family: 'Unbounded', sans-serif;
+      text-align: center;
+      font-size: clamp(0.95rem, 3vw, 1.15rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-top: 5px;
+      padding: 0 10px;
+    }
+
+    .arrow-doodle {
+      display: block;
+      margin: 12px auto 8px;
+      width: 20px;
+      height: 35px;
+    }
+
+    /* --- BLOQUE 5: POR SUPUESTO & FER-OLD --- */
+    .pero-section {
+      text-align: center;
+      padding: 10px 20px 30px;
+      width: 100%;
+    }
+
+    .por-supuesto-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(6px, 2vw, 12px);
+      margin-bottom: 8px;
+    }
+
+    .petalos-rosas-img {
+      width: clamp(26px, 6vw, 38px);
+      height: auto;
+    }
+
+    .petalos-rosas-img.reflected {
+      transform: scaleX(-1);
+    }
+
+    .por-supuesto-title {
+      font-size: clamp(1.35rem, 5vw, 1.95rem);
+      font-weight: 900;
+      color: #ffeb00;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .contexto-subtext {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 3vw, 1.05rem);
+      font-weight: 700;
+      line-height: 1.35;
+      color: #ffffff;
+    }
+
+    .fer-old-content {
+      display: grid;
+      grid-template-columns: 1fr clamp(95px, 24vw, 130px);
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      margin-top: 25px;
+    }
+
+    .fer-old-img {
+      width: 100%;
+      height: auto;
+    }
+
+    /* --- BLOQUE 6: PIEDRAS & NICO-OLD --- */
+    .stones-section {
+      width: 100%;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stones-grid {
+      display: grid;
+      grid-template-columns: clamp(95px, 24vw, 130px) 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .piedras-img {
+      width: 100%;
+      height: auto;
+      transform: rotate(-10px) scale(1.05);
+    }
+
+    .nico-old-grid {
+      display: grid;
+      grid-template-columns: clamp(90px, 22vw, 120px) 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nico-old-img {
+      width: 100%;
+      height: auto;
+    }
+
+    /* --- BLOQUE 7: DISCLAIMER --- */
+    .disclaimer-title {
+      transform: rotate(1deg);
+      width: 108%;
+      margin: 20px -4%;
+    }
+
+    .disclaimer-box {
+      padding: 20px;
+      text-align: left;
+      font-size: clamp(0.78rem, 2.5vw, 0.85rem);
+      line-height: 1.5;
+    }
+
+    /* --- BLOQUE 8: QUE TEAM ERES --- */
+    .team-section {
+      width: 100%;
+      padding: 30px 10px;
+      text-align: center;
+    }
+
+    .rubros-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .estrellas-img {
+      width: clamp(26px, 6vw, 36px);
+      height: auto;
+    }
+
+    .estrellas-img.reflected {
+      transform: scaleX(-1);
+    }
+
+    .rubros-text {
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.35;
+      max-width: 300px;
+    }
+
+    .que-title {
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 900;
+      margin-top: 5px;
+    }
+
+    .team-img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      margin: 6px auto;
+      display: block;
+    }
+
+    .eres-title {
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    /* GRID DE LAS 3 COLUMNAS PRINCIPALES */
+    .team-grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(4px, 1.5vw, 8px);
+      align-items: stretch;
+      margin-top: 15px;
+    }
+
+    .team-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-team-box {
+      width: 100%;
+      border-radius: 12px;
+      padding: 4px;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      cursor: pointer;
+    }
+
+    .btn-team-box.nico-bg { background-color: #2bbbb0; }
+    .btn-team-box.fer-bg { background-color: #ffeb00; }
+    .btn-team-box.orion-bg { background-color: #ff007a; }
+
+    .btn-team-box:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-team-box:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    .btn-team-inner {
+      background-color: #ffffff;
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.48rem, 1.6vw, 0.62rem);
+      font-weight: 900;
+      padding: clamp(5px, 1.5vw, 8px) 1px;
+      border-radius: 8px;
+      border: 1.5px solid #000000;
+      text-transform: uppercase;
+      text-align: center;
+      display: block;
+      letter-spacing: -0.4px;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+      transition: background-color 0.1s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-team-box:active .btn-team-inner {
+      background-color: #f0f0f0;
+      box-shadow: inset 0 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .sticker-card {
+      width: 100%;
+      border-radius: 6px;
+      padding: 8px 4px 0px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+      height: clamp(190px, 48vw, 290px);
+      border: 2px solid #000000;
+      box-sizing: border-box;
+    }
+
+    .sticker-card.nico-bg { background-color: #2bbbb0; }
+    .sticker-card.fer-bg { background-color: #ffeb00; }
+    .sticker-card.orion-bg { background-color: #ff007a; }
+
+    .sticker-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+    }
+
+    .btn-conoce {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.62rem, 2.2vw, 0.78rem);
+      font-weight: 900;
+      color: #000000;
+      text-decoration: none;
+      display: block;
+      margin-top: 10px;
+      line-height: 1.2;
+      -webkit-text-stroke: 1.5px #ffffff;
+      paint-order: stroke fill;
+    }
+
+    .btn-conoce:hover {
+      opacity: 0.85;
+    }
+
+    /* --- BLOQUE 9: FOOTER BANNER HORIZONTAL --- */
+    .footer-section {
+      width: 100%;
+      padding: 30px clamp(12px, 4vw, 25px);
+      display: grid;
+      grid-template-columns: 1fr clamp(110px, 30vw, 180px);
+      align-items: center;
+      gap: 10px;
+      background-color: #000000;
+    }
+
+    .footer-text-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .footer-title {
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      font-weight: 900;
+      color: #ff007a;
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-sub {
+      font-size: clamp(0.85rem, 2.8vw, 1.15rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 18px;
+      color: #ffffff;
+      max-width: 250px;
+    }
+
+    .btn-comenzar-footer {
+      display: inline-block;
+      background-color: #ffeb00;
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+      padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 28px);
+      border-radius: 14px;
+      text-decoration: none;
+      border: 2px solid #000000;
+      box-shadow: 3px 3px 0px #ffffff;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .btn-comenzar-footer:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0px #ffffff;
+    }
+
+    .btn-comenzar-footer:active {
+      transform: translateY(2px);
+      box-shadow: 1px 1px 0px #ffffff;
+    }
+
+    .footer-character-col {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+
+    .antiman3-img {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      display: block;
+    }
+
+    .estrella-izquierda {
+      position: absolute;
+      top: 30%;
+      left: -10px;
+      width: clamp(18px, 5vw, 32px);
+      height: auto;
+      z-index: 2;
+    }
+
+    .estrella-derecha {
+      position: absolute;
+      top: 38%;
+      right: 0px;
+      width: clamp(18px, 5vw, 32px);
+      height: auto;
+      z-index: 2;
+    }
+
+    /* AJUSTES RESPONSIVE EN MÓVILES (≤ 600px) */
+    @media (max-width: 600px) {
+      .page-container {
+        max-width: 100vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (FUERA DEL CONTENEDOR PARA OCUPAR TODA LA ANCHURA) -->
+    <header class="navbar">
+      <a href="index.html" class="brand-logo-link">
+        <img src="images/logo.png" alt="NPC! Logo" class="brand-logo-img">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="concepto.html">Concepto</a></li>
+          <li><a href="metodos.html">Métodos</a></li>
+          <li><a href="guias.html">Tu guía</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- BLOQUE 1: HEADER -->
+    <section class="hero-section">
+      <div class="hero-banner-container">
+        <img src="images/npc-titular.png" alt="NPC? Descúbrelo aquí" class="hero-banner-img">
+        <a href="aprender.html" class="hero-clickable-overlay" title="¡Descúbrelo aquí!"></a>
+      </div>
+
+      <div class="marquee-bar" style="margin-top: 20px;">
+        <div class="marquee-content">
+          ¿ESTÁS SEGURO? • ¿ESTÁS SEGURO? • ¿ESTÁS SEGURO? • ¿ESTÁS SEGURO? • ¿ESTÁS SEGURO? • 
+        </div>
+      </div>
+
+      <p class="intro-text-unbounded">Si alguna vez haz sentido que...</p>
+
+      <div class="feeling-box">
+        <div class="feeling-box-corners"></div>
+        <ul>
+          <li>Tu marca no es relevante</li>
+          <li>Tu público no te recuerda o a tus productos</li>
+          <li>Tu marca es muy parecida a otras</li>
+          <li>No te compran como habías esperado</li>
+          <li>No conoces bien tu diferencial de marca</li>
+          <li>No posees un concepto sólido para tu marca</li>
+        </ul>
+      </div>
+
+      <p class="conclusion-text-unbounded">
+        Entonces, me temo decirte que<br>tu marca es un...
+      </p>
+    </section>
+
+    <!-- BLOQUE 2: IMAGEN NPC -->
+    <section class="antiman1-section">
+      <img src="images/npc-no.png" alt="NPC! (No poseo concepto*)" class="npc-main-img">
+    </section>
+
+    <!-- BLOQUE 3: ANTIMAN 4 & SOLUCIÓN -->
+    <section class="solution-section">
+      <div class="antiman4-wrapper">
+        <img src="images/anfitrion-5.png" alt="Pero, descuida, tiene solución" class="antiman4-img">
+        <p class="nace-text-right">
+          Y por eso <span>nace</span><br>esta web
+        </p>
+      </div>
+    </section>
+
+    <div class="marquee-bar tilted-marquee">
+      <div class="marquee-content">
+        ¿Te animas? • ¿Te animas? • ¿Te animas? • ¿Te animas? • ¿Te animas? • ¿Te animas? • 
+      </div>
+    </div>
+
+    <!-- BLOQUE 4: LO QUE ENCONTRARÁS AQUÍ -->
+    <section class="found-section">
+      <h3>Lo que encontrarás aquí</h3>
+
+      <div class="found-content">
+        <p class="found-text font-montserrat">
+          En esta web podrás generar una guía para descubrir el <span class="highlight-teal">concepto genuino</span> que conducirá la dirección de tu marca personal y que te servirá de inspiración para personalizar tus proyectos o publicaciones que estés por lanzar para destacar como la marca única que eres en el mercado.
+        </p>
+
+        <div class="orion-old-wrapper">
+          <img src="images/orion-sticker.png" alt="Orión" class="orion-old-img">
+        </div>
+      </div>
+
+      <h3 class="pero-title-left">PERO...</h3>
+      <p class="question-concept-text">
+        ¿Un concepto es realmente<br>importante para una marca?
+      </p>
+
+      <svg class="arrow-doodle" viewBox="0 0 24 45" fill="none" stroke="#ffeb00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 10,2 C 22,12 2,22 14,34 M 6,28 L 14,34 L 18,24" />
+      </svg>
+    </section>
+
+    <!-- BLOQUE 5: POR SUPUESTO & FER-OLD -->
+    <section class="pero-section">
+      <div class="por-supuesto-wrapper">
+        <img src="images/tres-petalos-rosas.png" alt="Petalos Rosas" class="petalos-rosas-img">
+        <h2 class="por-supuesto-title">POR SUPUESTO</h2>
+        <img src="images/tres-petalos-rosas.png" alt="Petalos Rosas" class="petalos-rosas-img reflected">
+      </div>
+
+      <p class="contexto-subtext">
+        Solo hay que entrar en<br>contexto...
+      </p>
+
+      <div class="fer-old-content">
+        <div class="font-montserrat" style="font-size: clamp(0.78rem, 2.5vw, 0.85rem); line-height: 1.5;">
+          <p style="margin-bottom: 10px;">
+            Cada vez surgen más <span style="color: #2bbbb0; font-weight: 700;">emprendimientos</span> en el Perú.
+          </p>
+          <p style="margin-bottom: 10px;">
+            Sin un <span style="font-weight: 700;">elemento de diferenciación</span>, es muy fácil pasar desapercibido, especialmente frente a las <span style="color: #ffeb00; font-weight: 700;">marcas</span> con mayor visibilidad o un nicho ya establecido en el mercado.
+          </p>
+          <p>
+            Tener un concepto propio le da sentido y significado a tu trabajo y te ayuda a definir qué te hace <span style="color: #ffeb00; font-weight: 700;">único o relevante</span>.
+          </p>
+        </div>
+
+        <img src="images/fer-sticker.png" alt="Fer Old" class="fer-old-img">
+      </div>
+    </section>
+
+    <!-- BLOQUE 6: PIEDRAS & NICO-OLD -->
+    <section class="stones-section">
+      <div class="stones-grid">
+        <img src="images/piedras.png" alt="Piedras" class="piedras-img">
+        <p class="font-montserrat" style="font-size: clamp(0.78rem, 2.5vw, 0.85rem); line-height: 1.5;">
+          En ese mercado donde emergen la competencia con precios más bajos e ideas similares, es donde el concepto entra para dar un <span style="color: #ff007a; font-weight: 700;">valor intangible</span>, algo que no se puede copiar fácilmente.
+        </p>
+      </div>
+
+      <div class="nico-old-grid">
+        <img src="images/nico-sticker.png" alt="Nico Old" class="nico-old-img">
+        <p class="font-montserrat" style="font-size: clamp(0.78rem, 2.5vw, 0.85rem); line-height: 1.5;">
+          Tener un concepto no solo busca la <span style="color: #2bbbb0; font-weight: 700;">diferenciación</span>, sino que orienta cada paso, desde la parte visual hasta la forma en la que te diriges a tu público objetivo.
+        </p>
+      </div>
+    </section>
+
+    <!-- BLOQUE 7: DISCLAIMER -->
+    <div class="marquee-bar marquee-pink disclaimer-title">
+      <div class="marquee-content">
+        ¡DISCLAIMER! • ¡DISCLAIMER! • ¡DISCLAIMER! • ¡DISCLAIMER! • ¡DISCLAIMER! • 
+      </div>
+    </div>
+
+    <section class="disclaimer-box font-montserrat">
+      <p style="font-weight: 700; margin-bottom: 8px;">
+        Una pequeña, pero sustancial <span style="color: #2bbbb0;">aclaración...</span>
+      </p>
+      <p style="color: #cccccc;">
+        Para empezar, no somos una consultora de marcas que te otorgue el concepto de tu marca, mas bien nos presentamos como una <span style="color: #ffeb00;">herramienta de inspiración</span> para encontrar tu concepto de una forma interactiva y donde podrás explorar las variadas <span style="color: #2bbbb0;">posibilidades e inspirarte</span> a generar tu propio significado de tu marca como <span style="color: #ff007a;">un concepto</span> que haga la diferencia con tus otros competidores.
+      </p>
+    </section>
+
+    <!-- BLOQUE 8: QUE TEAM ERES -->
+    <section class="team-section">
+      <div class="rubros-header">
+        <img src="images/tres-petalos-amarillos.png" alt="Pétalos" class="estrellas-img">
+        <p class="rubros-text font-montserrat">
+          Conoce los rubros en los que<br>nos centramos:
+        </p>
+        <img src="images/tres-petalos-amarillos.png" alt="Pétalos" class="estrellas-img reflected">
+      </div>
+
+      <h2 class="que-title">¿Qué</h2>
+      <img src="images/team-texto.png" alt="TEAM" class="team-img">
+      <h2 class="eres-title">eres?</h2>
+
+      <div class="team-grid-container">
+        <!-- Columna Nico -->
+        <div class="team-column">
+          <a href="nico.html" class="btn-team-box nico-bg">
+            <span class="btn-team-inner">ILUSTRACIÓN</span>
+          </a>
+          <div class="sticker-card nico-bg" style="margin-top: 8px;">
+            <img src="images/nico.png" alt="Nico" class="sticker-img">
+          </div>
+          <a href="nico.html" class="btn-conoce">Conoce a Nico</a>
+        </div>
+
+        <!-- Columna Fer -->
+        <div class="team-column">
+          <a href="fer.html" class="btn-team-box fer-bg">
+            <span class="btn-team-inner">CRAFTING</span>
+          </a>
+          <div class="sticker-card fer-bg" style="margin-top: 8px;">
+            <img src="images/fer.png" alt="Fer" class="sticker-img">
+          </div>
+          <a href="fer.html" class="btn-conoce">Conoce a Fer</a>
+        </div>
+
+        <!-- Columna Orión -->
+        <div class="team-column">
+          <a href="orion.html" class="btn-team-box orion-bg">
+            <span class="btn-team-inner">AROMATERAPIA</span>
+          </a>
+          <div class="sticker-card orion-bg" style="margin-top: 8px;">
+            <img src="images/orion.png" alt="Orión" class="sticker-img">
+          </div>
+          <a href="orion.html" class="btn-conoce">Conoce a Orión</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOQUE 9: FOOTER BANNER HORIZONTAL -->
+    <section class="footer-section">
+      <div class="footer-text-col">
+        <h2 class="footer-title">AHORA</h2>
+        <p class="footer-sub">¿Estás listo para apostar por tu marca?</p>
+        <a href="aprender.html" class="btn-comenzar-footer">COMENZAR</a>
+      </div>
+
+      <div class="footer-character-col">
+        <img src="images/dos-estrellas-amarillas.png" alt="Estrella" class="estrella-izquierda">
+        <img src="images/anfitrion-3.png" alt="Anfitrión" class="antiman3-img">
+        <img src="images/dos-estrellas-amarillas.png" alt="Estrella" class="estrella-derecha">
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

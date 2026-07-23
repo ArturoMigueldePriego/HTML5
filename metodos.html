@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPC! - Métodos para Crear un Concepto</title>
+  <link rel="stylesheet" href="navbar.css">
+  <style>
+    /* Carga de Fuentes desde la carpeta local 'fonts/' */
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Italic.ttf') format('truetype');
+      font-weight: 400;
+      font-style: italic;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-BoldItalic.ttf') format('truetype');
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    /* Reset y Tipografía por Defecto */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #000000;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .page-container {
+      width: 100%;
+      max-width: 600px;
+      background-color: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- BARRA DE NAVEGACIÓN SUPERIOR (NAVBAR) --- */
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+      width: 100%;
+      box-sizing: border-box;
+      border-bottom: 2px solid #000000;
+    }
+
+    .brand-logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-weight: 900;
+      color: #000000;
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(0.8rem, 3vw, 2rem);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Unbounded', sans-serif;
+      text-decoration: none;
+      color: #000000;
+      font-size: clamp(0.75rem, 2.2vw, 0.95rem);
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    /* --- CONTENIDO PRINCIPAL --- */
+    .main-content {
+      width: 100%;
+      padding: 24px 20px 40px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* BOTÓN SUPERIOR DERECHO */
+    .top-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: clamp(15px, 3vw, 25px);
+    }
+
+    .btn-top-right {
+      background-color: #ffeb00;
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(0.7rem, 2.2vw, 0.85rem);
+      padding: clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px);
+      border-radius: 8px;
+      text-decoration: none;
+      border: 2px solid #000000;
+      box-shadow: 2px 2px 0px #ffffff;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-top-right:hover {
+      transform: translateY(-2px);
+      box-shadow: 3px 3px 0px #ffffff;
+    }
+
+    .btn-top-right:active {
+      transform: translateY(1px);
+      box-shadow: 1px 1px 0px #ffffff;
+    }
+
+    /* ENCABEZADO */
+    .intro-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+      color: #cccccc;
+      margin-bottom: 8px;
+    }
+
+    h1.main-title {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+      line-height: 1.15;
+      margin-bottom: clamp(18px, 4vw, 25px);
+      color: #ffffff;
+    }
+
+    h2.section-subtitle {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1rem, 3.2vw, 1.2rem);
+      margin-top: clamp(30px, 6vw, 40px);
+      margin-bottom: clamp(14px, 3vw, 20px);
+      color: #ffffff;
+    }
+
+    /* PÁRRAFOS Y BLOQUES DE TEXTO */
+    .text-block {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.82rem, 2.6vw, 0.95rem);
+      line-height: 1.55;
+      color: #dddddd;
+      margin-bottom: 14px;
+      max-width: 82%;
+    }
+
+    /* CARDS: LLUVIA DE IDEAS & MAPA MENTAL */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(10px, 3vw, 16px);
+      margin-top: 10px;
+    }
+
+    .card-item {
+      background-color: #ffffff;
+      color: #000000;
+      border-radius: 12px;
+      padding: clamp(12px, 3vw, 16px) clamp(10px, 2.5vw, 14px);
+      border: 2px solid #000000;
+      position: relative;
+    }
+
+    .card-item.card-teal {
+      box-shadow: 3px 3px 0px #31b3b2;
+    }
+
+    .card-item.card-yellow {
+      box-shadow: 3px 3px 0px #ffeb00;
+    }
+
+    .card-item h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.8rem, 2.6vw, 0.95rem);
+      margin-bottom: 8px;
+    }
+
+    .card-item p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.72rem, 2.2vw, 0.8rem);
+      line-height: 1.45;
+      color: #222222;
+    }
+
+    /* LISTAS */
+    ul.method-list {
+      list-style: none;
+      margin: 8px 0 12px 12px;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      max-width: 80%;
+    }
+
+    ul.method-list li {
+      position: relative;
+      padding-left: 14px;
+      margin-bottom: 4px;
+      color: #cccccc;
+    }
+
+    ul.method-list li::before {
+      content: "-";
+      position: absolute;
+      left: 0;
+    }
+
+    /* ENLACE RICO */
+    a.link-rico {
+      color: #ffffff;
+      text-decoration: underline;
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      font-style: italic;
+      display: inline-block;
+      margin-top: 8px;
+      transition: color 0.2s;
+    }
+
+    a.link-rico:hover {
+      color: #ffeb00;
+    }
+
+    /* FILAS DE PERSONAJES Y MÉTODOS */
+    .character-method-row {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 3vw, 20px);
+      margin-bottom: clamp(20px, 4vw, 30px);
+    }
+
+    .character-method-row.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .character-method-text {
+      flex: 1;
+    }
+
+    .character-method-text h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.88rem, 2.8vw, 1rem);
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .character-method-text p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.78rem, 2.4vw, 0.88rem);
+      line-height: 1.45;
+      color: #cccccc;
+    }
+
+    .character-method-text .explore-link {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.72rem, 2.2vw, 0.8rem);
+      font-style: italic;
+      color: #aaaaaa;
+      margin-top: 6px;
+      display: block;
+    }
+
+    .avatar-wrapper {
+      width: clamp(75px, 20vw, 95px);
+      height: clamp(75px, 20vw, 95px);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* SECCIÓN FINAL / FOOTER CON ANFITRIÓN E INSIGNIA A LA IZQUIERDA */
+    .final-section {
+      margin-top: clamp(35px, 6vw, 50px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(15px, 4vw, 25px);
+      position: relative;
+    }
+
+    .final-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .final-title {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.1rem, 3.8vw, 1.4rem);
+      line-height: 1.25;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    .final-sub {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.8rem, 2.4vw, 0.9rem);
+      color: #dddddd;
+      margin-bottom: 14px;
+    }
+
+    .btn-yellow-main {
+      display: inline-block;
+      background-color: #ffeb00;
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(0.8rem, 2.3vw, 0.95rem);
+      padding: clamp(9px, 2.2vw, 11px) clamp(20px, 4vw, 28px);
+      border-radius: 12px;
+      text-decoration: none;
+      border: 3px solid #000000;
+      box-shadow: 3px 3px 0px #ffffff;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      z-index: 2;
+    }
+
+    .btn-yellow-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0px #ffffff;
+    }
+
+    .btn-yellow-main:active {
+      transform: translateY(1px);
+      box-shadow: 1px 1px 0px #ffffff;
+    }
+
+    .anfitrion-star-wrapper {
+      position: relative;
+      width: clamp(150px, 42vw, 200px);
+      height: clamp(150px, 42vw, 200px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .anfitrion-img {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: auto;
+    }
+
+    /* AJUSTES RESPONSIVE MÓVIL (≤ 600px) */
+    @media (max-width: 600px) {
+      .page-container {
+        max-width: 100vw;
+      }
+      .navbar {
+        padding: 14px 16px;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (FUERA DEL CONTENEDOR PARA OCUPAR TODA LA ANCHURA) -->
+    <header class="navbar">
+      <a href="index.html" class="brand-logo-link">
+        <img src="images/logo.png" alt="NPC! Logo" class="brand-logo-img">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="concepto.html">Concepto</a></li>
+          <li><a href="metodos.html">Métodos</a></li>
+          <li><a href="guias.html">Tu guía</a></li>
+        </ul>
+      </nav>
+    </header>
+
+
+    <main class="main-content">
+      <!-- BOTÓN SUPERIOR DERECHO -->
+      <div class="top-header">
+        <a href="guias.html" class="btn-top-right">Ir directo al reto</a>
+      </div>
+
+      <!-- ENCABEZADO -->
+      <p class="intro-label">Y ahora lo bueno:</p>
+      <h1 class="main-title">¿Cómo puedo crear<br>un concepto potente?</h1>
+
+      <!-- TEXTO INTRODUCTORIO -->
+      <p class="text-block">
+        No existe una única forma de crear un concepto, ni hay una forma correcta de hacerlo.
+      </p>
+      <p class="text-block">
+        Algunas personas parten de palabras, otras de experiencias, historias, emociones o referencias visuales. Lo importante es encontrar el método que mejor se adapte a tu forma de pensar y crear.
+      </p>
+      <p class="text-block">
+        Explora distintas rutas y descubre cuál funciona mejor para ti.
+      </p>
+
+      <!-- SECCIÓN 1: ESTAS DOS VAN DE LA MANO -->
+      <h2 class="section-subtitle">Estas dos van de la mano</h2>
+      <div class="cards-grid">
+        <!-- Card Lluvia de Ideas -->
+        <div class="card-item card-teal">
+          <h3>Lluvia de ideas</h3>
+          <p>
+            La cantidad primero, la selección después. Anota todas las ideas que surjan sin juzgarlas. Muchas veces los conceptos más interesantes aparecen después de las primeras respuestas obvias.
+          </p>
+        </div>
+        <!-- Card Mapa Mental -->
+        <div class="card-item card-yellow">
+          <h3>Mapa Mental</h3>
+          <p>
+            Conecta ideas para descubrir nuevas posibilidades. Parte de una palabra central y expande conceptos relacionados hasta encontrar patrones, conexiones o temas recurrentes.
+          </p>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 2: EL CLÁSICO MÁS EMPLEADO -->
+      <h2 class="section-subtitle">El clásico más empleado:</h2>
+      <div style="margin-bottom: 20px;">
+        <h4 style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(0.88rem, 2.8vw, 0.98rem); margin-bottom: 6px;">Briefing de Marca</h4>
+        <p class="text-block">
+          Empieza por entender el problema y para ello —así como para los demás métodos— se debe investigar a fondo.
+        </p>
+        <p class="text-block">
+          Antes de crear, responde preguntas clave: quién eres, qué ofreces, para quién trabajas y qué te hace diferente.
+        </p>
+        <p class="text-block">
+          Este método es muy utilizado en diseño.
+        </p>
+      </div>
+      <div style="margin-bottom: 25px;">
+        <h4 style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(0.88rem, 2.8vw, 0.98rem); margin-bottom: 6px;">Combinación de Palabras</h4>
+        <p class="text-block">
+          No es un método per se, pero consiste en unir ideas diversas para generar conceptos.<br>Por ejemplo:
+        </p>
+        <ul class="method-list">
+          <li>Naturaleza + Ritual</li>
+          <li>Fantasía + Comunidad</li>
+          <li>Ciencia + Bienestar</li>
+        </ul>
+        <p class="text-block">
+          Estas combinaciones ayudan a generar ideas más innovadoras y frescas.
+        </p>
+      </div>
+
+      <!-- SECCIÓN 3: MÉTODO NUEVO EXPERIMENTAL -->
+      <h2 class="section-subtitle">Método nuevo experimental</h2>
+      <div style="margin-bottom: 25px;">
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(1rem, 3.2vw, 1.1rem); margin-bottom: 8px;">Conceptos RICO</h3>
+        <p class="text-block" style="font-style: italic; color: #aaaaaa;">
+          Método en desarrollo por el docente universitario Juan Pablo Aponte
+        </p>
+        <p class="text-block">
+          Porque hasta los conceptos deben ser R.I.C.O.S, si cumple con cada letra: R (relevante), I (inspirador), C (claro) y O (original), entonces puede considerarse un buen concepto.
+        </p>
+        <a href="http://www.rico.dat" target="_blank" class="link-rico">Ver el método RICO aquí</a>
+      </div>
+
+      <!-- SECCIÓN 4: OTROS ENFOQUES -->
+      <h2 class="section-subtitle">Otros enfoques:</h2>
+      
+      <!-- Nico -->
+      <div class="character-method-row">
+        <div class="character-method-text">
+          <h4>Semiótica y Arquetipos:</h4>
+          <p>
+            Descubre qué personalidad representa mejor tu marca y cómo puede conectar emocionalmente con las personas. Analiza los significados detrás de colores, símbolos, formas e imágenes para comunicar de manera más estratégica.
+          </p>
+          <span class="explore-link">Explora estos métodos junto a Nico</span>
+        </div>
+        <div class="avatar-wrapper">
+          <img src="images/nico-cara.png" alt="Nico">
+        </div>
+      </div>
+
+      <!-- Orión -->
+      <div class="character-method-row reverse">
+        <div class="character-method-text">
+          <h4>Storytelling Sensorial y Experiencial</h4>
+          <p>
+            Construye conceptos a partir de emociones, recuerdos, sensaciones y experiencias memorables.
+          </p>
+          <span class="explore-link">Explora estos métodos junto a Orión</span>
+        </div>
+        <div class="avatar-wrapper">
+          <img src="images/orion-cara.png" alt="Orión">
+        </div>
+      </div>
+
+      <!-- Fer -->
+      <div class="character-method-row">
+        <div class="character-method-text">
+          <h4>Etnografía Visual, Collage y Moodboarding</h4>
+          <p>
+            Investiga referentes, imágenes, objetos y contextos para detectar patrones, inspiraciones y oportunidades conceptuales.
+          </p>
+          <span class="explore-link">Explora estos métodos junto a Fer</span>
+        </div>
+        <div class="avatar-wrapper">
+          <img src="images/fer-cara.png" alt="Fer">
+        </div>
+      </div>
+
+      <!-- SECCIÓN FINAL MODIFICADA: IMAGEN A LA IZQUIERDA Y TEXTO A LA DERECHA -->
+      <div class="final-section">
+        <div class="anfitrion-star-wrapper">
+          <img src="images/anfitrion-4.png" alt="Anfitrión" class="anfitrion-img">
+        </div>
+        <div class="final-content">
+          <h2 class="final-title">¿Lo sientes?<br>este es tu momento de brillar</h2>
+          <p class="final-sub">Elige a tu guía</p>
+          <a href="guias.html" class="btn-yellow-main">VAMOS</a>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

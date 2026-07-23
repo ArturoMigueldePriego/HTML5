@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPC! - Evaluación de Orión</title>
+  <link rel="stylesheet" href="navbar.css">
+  
+  <style>
+    /* Carga de Fuentes desde la carpeta local 'fonts/' */
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Italic.ttf') format('truetype');
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --primary-color: #ff007a; /* Magenta Orión */ }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #000000;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .eval-wrapper {
+      width: 100%;
+      max-width: 600px;
+      background-color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* CONTENEDOR INTERNO DEL QUIZ */
+    .eval-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .category-tag-container { margin-bottom: 20px; }
+
+    .category-tag {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-weight: 900;
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 2px solid #000000;
+      box-shadow: 2px 2px 0px #ffffff;
+    }
+
+    .quiz-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    .question-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 25px;
+      line-height: 1.2;
+    }
+
+    /* Grid cambiado a 3 columnas horizontales */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .option-card {
+      background-color: #000000;
+      border: 2.5px solid #ffffff;
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 130px;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 3px 3px 0px rgba(255, 255, 255, 0.2);
+    }
+
+    .option-card p { 
+      font-size: clamp(0.7rem, 1.8vw, 0.85rem); 
+      font-weight: 600; 
+      line-height: 1.25; 
+    }
+    
+    .option-card img { 
+      max-width: 100%; 
+      max-height: 75px; 
+      height: auto; 
+      border-radius: 6px; 
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+
+    .option-card.selected {
+      border: 3px solid var(--primary-color);
+      box-shadow: 4px 4px 0px var(--primary-color);
+      transform: translateY(-2px);
+      background-color: rgba(255, 0, 122, 0.05);
+    }
+
+    /* Contenedor de Botones de Acción */
+    .action-btn-container { 
+      margin-top: auto; 
+      margin-bottom: 20px; 
+      width: 100%;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn-action {
+      background-color: var(--primary-color);
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-weight: 900;
+      padding: 12px 20px;
+      border: 2.5px solid #000000;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #ffffff;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      flex: 1;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    .btn-action:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 5px 5px 0px #ffffff; 
+    }
+    
+    .btn-action:disabled { 
+      opacity: 0.4; 
+      cursor: not-allowed; 
+      transform: none; 
+      box-shadow: none; 
+      border-color: #666666;
+    }
+
+    /* Botón Secundario (Anterior / Rehacer) */
+    .btn-secondary {
+      background-color: #000000;
+      color: #ffffff;
+      border: 2.5px solid #ffffff;
+      box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.3);
+    }
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 5px 5px 0px #ffffff;
+    }
+
+    .result-container {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      padding: 20px 0;
+      gap: 15px;
+    }
+
+    .result-subtitle { 
+      font-size: clamp(1rem, 3vw, 1.2rem); 
+      font-weight: 600; 
+      color: #cccccc; 
+    }
+    
+    .result-concept {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 0px #000000;
+    }
+
+    .result-example { 
+      font-size: clamp(0.95rem, 2.8vw, 1.1rem); 
+      line-height: 1.4; 
+      color: #dddddd; 
+      max-width: 90%; 
+    }
+
+    @media (max-width: 600px) {
+      .eval-wrapper {
+        max-width: 100vw;
+      }
+      .navbar {
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="eval-wrapper">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (FUERA DEL CONTENEDOR PARA OCUPAR TODA LA ANCHURA) -->
+    <header class="navbar">
+      <a href="index.html" class="brand-logo-link">
+        <img src="images/logo.png" alt="NPC! Logo" class="brand-logo-img">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="concepto.html">Concepto</a></li>
+          <li><a href="metodos.html">Métodos</a></li>
+          <li><a href="guias.html">Tu guía</a></li>
+        </ul>
+      </nav>
+    </header>
+
+
+    <div class="eval-content">
+      <div class="category-tag-container">
+        <span class="category-tag" id="category-name">Aromaterapia</span>
+      </div>
+
+      <main class="quiz-container" id="quiz-screen">
+        <h2 class="question-title" id="question-text">1. Elige una piedra ✨</h2>
+        <div class="options-grid" id="options-container"></div>
+        <div class="action-btn-container">
+          <button class="btn-action btn-secondary" id="btn-prev" onclick="retrocederPregunta()" style="display: none;">ANTERIOR</button>
+          <button class="btn-action" id="btn-next" disabled onclick="avanzarPregunta()">SIGUIENTE</button>
+        </div>
+      </main>
+
+      <section class="result-container" id="result-screen">
+        <p class="result-subtitle">Tu concepto sería:</p>
+        <h1 class="result-concept" id="res-concepto">Refugio del bosque</h1>
+        <p class="result-example" id="res-ejemplo">Un lugar donde el ruido desaparece y puedes volver a ti</p>
+        
+        <div class="action-btn-container" style="margin-top: 20px;">
+          <button class="btn-action btn-secondary" onclick="reiniciarQuiz()">REHACER CONCEPTO</button>
+          <a href="final.html" class="btn-action" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">FINALIZAR</a>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+  <script>
+    const ORION_RESULTS = {
+      AAA: { concepto: "Refugio del bosque", ejemplo: "Un lugar donde el ruido desaparece y puedes volver a ti" },
+      AAB: { concepto: "Camino en paz", ejemplo: "Los aromas acompañan momentos de claridad mental" },
+      AAC: { concepto: "Recuerdo en el bosque", ejemplo: "Aromas que evocan la tranquilidad de tiempos simples" },
+      ABA: { concepto: "Brisa protectora", ejemplo: "Una casa firme con vista al mar" },
+      ABB: { concepto: "El cielo es el límite", ejemplo: "Un aroma para generar ideas y encontrar nuevas posibilidades" },
+      ABC: { concepto: "Veranos eternos", ejemplo: "El recuerdo de un lugar donde todo era más sencillo" },
+      ACA: { concepto: "Entre páginas tranquilas", ejemplo: "La calma de leer mientras el mundo duerme" },
+      ACB: { concepto: "Historias por escribir", ejemplo: "Aromas que despiertan la creatividad" },
+      ACC: { concepto: "Biblioteca de recuerdos", ejemplo: "Cada fragancia guarda una historia especial" },
+      BAA: { concepto: "Abrazo del bosque", ejemplo: "Un refugio cálido para reconectar contigo" },
+      BAB: { concepto: "Florecer despacio", ejemplo: "Cada aroma acompaña tu crecimiento personal" },
+      BAC: { concepto: "Refugio de la infancia", ejemplo: "Aromas que abrazan los recuerdos más queridos" },
+      BBA: { concepto: "Amor en la marea", ejemplo: "La calma de compartir un momento especial" },
+      BBB: { concepto: "Sueños junto al mar", ejemplo: "Inspiración que fluye como la brisa marina" },
+      BBC: { concepto: "Amor de verano", ejemplo: "Un amor efímero pero intenso y mágico" },
+      BCA: { concepto: "El aquí y ahora", ejemplo: "Tómate una pausa para cuidar de ti" },
+      BCB: { concepto: "Ideas que florecen", ejemplo: "Creatividad que fluye por la intensidad de las emociones" },
+      BCC: { concepto: "Historias del corazón", ejemplo: "Recuerdos que permanecen vivos" },
+      CAA: { concepto: "Bosque abierto", ejemplo: "Respira profundamente y siente libertad" },
+      CAB: { concepto: "Nuevos senderos", ejemplo: "Cada aroma invita a descubrir algo diferente" },
+      CAC: { concepto: "Ecos de aventura", ejemplo: "Nuevos retos, nuevas historias que contar" },
+      CBA: { concepto: "Descansando frente al mar", ejemplo: "Fluir sin preocupaciones y recordar estar en el presente" },
+      CBB: { concepto: "Mareas creativas", ejemplo: "Ideas potentes que aparecen como olas para surfear" },
+      CBC: { concepto: "Donde nos conocimos", ejemplo: "Recordar a alguien que marcó tu vida" },
+      CCA: { concepto: "Noches de lectura", ejemplo: "Sueña y vuela a otro mundo a través de los aromas" },
+      CCB: { concepto: "Universos secretos", ejemplo: "Aromas que despiertan sentidos entre las historias" },
+      CCC: { concepto: "Memorias de tinta", ejemplo: "Cada aroma guarda una historia que merece ser recordada" }
+    };
+
+    const PREGUNTAS_ORION = [
+      {
+        titulo: "1. Elige una piedra ✨",
+        opciones: [
+          { id: "A", texto: "Turmalina Negra", imagen: "images/turmalina.png" },
+          { id: "B", texto: "Cuarzo rosa", imagen: "images/cuarzo.png" },
+          { id: "C", texto: "Aguamarina", imagen: "images/aguamarina.png" }
+        ]
+      },
+      {
+        titulo: "2. ¿A qué lugar transporta tus aromas?",
+        opciones: [
+          { id: "A", texto: "Una cabaña en el bosque" },
+          { id: "B", texto: "Una casa frente al mar" },
+          { id: "C", texto: "Una librería al anochecer" }
+        ]
+      },
+      {
+        titulo: "3. ¿Qué emoción quieres despertar?",
+        opciones: [
+          { id: "A", texto: "Calma" },
+          { id: "B", texto: "Inspiración" },
+          { id: "C", texto: "Nostalgia" }
+        ]
+      }
+    ];
+
+    let pasoActual = 0;
+    let respuestas = [];
+    let opcionSeleccionada = null;
+
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+
+    renderizarPaso();
+
+    function renderizarPaso() {
+      const dataPaso = PREGUNTAS_ORION[pasoActual];
+      questionText.textContent = dataPaso.titulo;
+      optionsContainer.innerHTML = '';
+
+      /* Recuperar la respuesta guardada previamente si el usuario retrocede */
+      opcionSeleccionada = respuestas[pasoActual] || null;
+      btnNext.disabled = !opcionSeleccionada;
+
+      /* Gestionar visibilidad del botón Anterior */
+      if (pasoActual === 0) {
+        btnPrev.style.display = 'none';
+      } else {
+        btnPrev.style.display = 'block';
+      }
+
+      /* Gestionar texto del botón Siguiente / Terminar */
+      if (pasoActual === PREGUNTAS_ORION.length - 1) {
+        btnNext.textContent = "TERMINAR";
+      } else {
+        btnNext.textContent = "SIGUIENTE";
+      }
+
+      dataPaso.opciones.forEach(opc => {
+        const card = document.createElement('div');
+        card.className = 'option-card';
+        if (opc.id === opcionSeleccionada) {
+          card.classList.add('selected');
+        }
+        card.onclick = () => seleccionarOpcion(card, opc.id);
+
+        let contenido = '';
+        if (opc.imagen) {
+          contenido += `<img src="${opc.imagen}" alt="${opc.texto || ''}">`;
+        }
+        if (opc.texto) {
+          contenido += `<p>${opc.texto}</p>`;
+        }
+
+        card.innerHTML = contenido;
+        optionsContainer.appendChild(card);
+      });
+    }
+
+    function seleccionarOpcion(cardElement, optionId) {
+      document.querySelectorAll('.option-card').forEach(el => el.classList.remove('selected'));
+      cardElement.classList.add('selected');
+      opcionSeleccionada = optionId;
+      btnNext.disabled = false;
+    }
+
+    function avanzarPregunta() {
+      if (!opcionSeleccionada) return;
+      
+      /* Guardar o actualizar la respuesta del paso actual en el array */
+      respuestas[pasoActual] = opcionSeleccionada;
+
+      if (pasoActual < PREGUNTAS_ORION.length - 1) {
+        pasoActual++;
+        renderizarPaso();
+      } else {
+        mostrarResultado();
+      }
+    }
+
+    function retrocederPregunta() {
+      if (pasoActual > 0) {
+        pasoActual--;
+        renderizarPaso();
+      }
+    }
+
+    function mostrarResultado() {
+      const clave = respuestas.join('');
+      const resultado = ORION_RESULTS[clave] || ORION_RESULTS["AAA"];
+
+      quizScreen.style.display = 'none';
+      resultScreen.style.display = 'flex';
+
+      document.getElementById('res-concepto').textContent = resultado.concepto;
+      document.getElementById('res-ejemplo').textContent = resultado.ejemplo;
+    }
+
+    function reiniciarQuiz() {
+      pasoActual = 0;
+      respuestas = [];
+      opcionSeleccionada = null;
+      resultScreen.style.display = 'none';
+      quizScreen.style.display = 'flex';
+      renderizarPaso();
+    }
+  </script>
+</body>
+</html>

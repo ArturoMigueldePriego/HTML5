@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPC! - Evaluación de Fer</title>
+  <link rel="stylesheet" href="navbar.css">
+  <style>
+    /* Carga de Fuentes desde la carpeta local 'fonts/' */
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Italic.ttf') format('truetype');
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    /* Reset Base y Variables */
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    :root { 
+      --primary-color: #ffeb00; /* Amarillo Fer / Global */ 
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #000000;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Layout Principal (Ancho unificado a 600px para consistencia con el diseño anterior) */
+    .eval-wrapper {
+      width: 100%;
+      max-width: 600px;
+      background-color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* --- BARRA DE NAVEGACIÓN SUPERIOR (NAVBAR) --- */
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+      width: 100%;
+      box-sizing: border-box;
+      border-bottom: 2px solid #000000;
+    }
+
+    .brand-logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-weight: 900;
+      color: #000000;
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(0.8rem, 3vw, 2rem);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Unbounded', sans-serif;
+      text-decoration: none;
+      color: #000000;
+      font-size: clamp(0.75rem, 2.2vw, 0.95rem);
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    /* CONTENEDOR INTERNO DEL QUIZ */
+    .eval-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .category-tag-container { 
+      margin-bottom: 20px; 
+    }
+
+    .category-tag {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-weight: 900;
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 2px solid #000000;
+      box-shadow: 2px 2px 0px #ffffff;
+    }
+
+    .quiz-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    .question-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 25px;
+      line-height: 1.2;
+    }
+
+    /* Grid de Opciones en 3 columnas horizontales */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    /* Tarjetas de Respuestas */
+    .option-card {
+      background-color: #000000;
+      border: 2.5px solid #ffffff;
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 130px;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 3px 3px 0px rgba(255, 255, 255, 0.2);
+    }
+
+    .option-card p { 
+      font-size: clamp(0.7rem, 1.8vw, 0.85rem); 
+      font-weight: 600; 
+      line-height: 1.25; 
+    }
+    
+    .option-card img { 
+      max-width: 100%; 
+      max-height: 75px; 
+      height: auto; 
+      border-radius: 6px; 
+      object-fit: contain;
+    }
+
+    .option-card.selected {
+      border: 3px solid var(--primary-color);
+      box-shadow: 4px 4px 0px var(--primary-color);
+      transform: translateY(-2px);
+      background-color: rgba(255, 235, 0, 0.05);
+    }
+
+    /* Contenedor de Botones de Acción */
+    .action-btn-container { 
+      margin-top: auto; 
+      margin-bottom: 20px; 
+      width: 100%;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn-action {
+      background-color: var(--primary-color);
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-weight: 900;
+      padding: 12px 20px;
+      border: 2.5px solid #000000;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #ffffff;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      flex: 1;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    .btn-action:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 5px 5px 0px #ffffff; 
+    }
+    
+    .btn-action:disabled { 
+      opacity: 0.4; 
+      cursor: not-allowed; 
+      transform: none; 
+      box-shadow: none; 
+      border-color: #666666;
+    }
+
+    /* Botón Secundario (Anterior / Rehacer) */
+    .btn-secondary {
+      background-color: #000000;
+      color: #ffffff;
+      border: 2.5px solid #ffffff;
+      box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.3);
+    }
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 5px 5px 0px #ffffff;
+    }
+
+    /* PANTALLA DE RESULTADOS */
+    .result-container {
+      display: none;
+      flex-direction: column;
+      gap: 25px;
+      align-items: center;
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .result-left { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      width: 100%;
+    }
+    
+    .result-subtitle { 
+      font-size: clamp(1rem, 3vw, 1.2rem); 
+      font-weight: 600; 
+      color: #cccccc; 
+    }
+    
+    .result-concept {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 0px #000000;
+    }
+
+    .result-example { 
+      font-size: clamp(0.95rem, 2.8vw, 1.1rem); 
+      line-height: 1.4; 
+      color: #dddddd; 
+      max-width: 90%; 
+      margin: 0 auto;
+    }
+    
+    .result-right { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      background-color: #111111;
+      border: 2px solid #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+      box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.3);
+    }
+    
+    .arquetipo-header { 
+      font-family: 'Unbounded', sans-serif; 
+      font-size: clamp(0.85rem, 2.5vw, 1rem); 
+      font-weight: 900; 
+      margin-bottom: 6px; 
+      color: #aaaaaa;
+      letter-spacing: 1px;
+    }
+    
+    .arquetipo-nombre { 
+      font-family: 'Unbounded', sans-serif; 
+      font-size: clamp(1.3rem, 4vw, 1.6rem); 
+      font-weight: 900; 
+      color: #ffffff; 
+    }
+
+    /* AJUSTE RESPONSIVE MÓVIL */
+    @media (max-width: 600px) {
+      .eval-wrapper {
+        max-width: 100vw;
+      }
+      .navbar {
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="eval-wrapper">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (FUERA DEL CONTENEDOR PARA OCUPAR TODA LA ANCHURA) -->
+    <header class="navbar">
+      <a href="index.html" class="brand-logo-link">
+        <img src="images/logo.png" alt="NPC! Logo" class="brand-logo-img">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="concepto.html">Concepto</a></li>
+          <li><a href="metodos.html">Métodos</a></li>
+          <li><a href="guias.html">Tu guía</a></li>
+        </ul>
+      </nav>
+    </header>
+
+
+    <div class="eval-content">
+      <div class="category-tag-container">
+        <span class="category-tag" id="category-name">Crafting</span>
+      </div>
+
+      <main class="quiz-container" id="quiz-screen">
+        <h2 class="question-title" id="question-text">1. ¿Qué disfrutas más al crear?</h2>
+        <div class="options-grid" id="options-container"></div>
+        <div class="action-btn-container">
+          <button class="btn-action btn-secondary" id="btn-prev" onclick="retrocederPregunta()" style="display: none;">ANTERIOR</button>
+          <button class="btn-action" id="btn-next" disabled onclick="avanzarPregunta()">SIGUIENTE</button>
+        </div>
+      </main>
+
+      <section class="result-container" id="result-screen">
+        <div class="result-left">
+          <p class="result-subtitle">Tu concepto sería:</p>
+          <h1 class="result-concept" id="res-concepto">Una segunda oportunidad</h1>
+          <p class="result-example" id="res-ejemplo">Transformas materiales comunes en objetos llenos de significado</p>
+        </div>
+
+        <div class="result-right">
+          <span class="arquetipo-header">PERFIL ASIGNADO:</span>
+          <h3 class="arquetipo-nombre" id="res-perfil">ALQUIMISTAS</h3>
+        </div>
+
+        <div class="action-btn-container" style="margin-top: 10px;">
+          <button class="btn-action btn-secondary" onclick="reiniciarQuiz()">REHACER CONCEPTO</button>
+          <a href="final.html" class="btn-action" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">FINALIZAR</a>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+  <script>
+    const FER_RESULTS = {
+      AAA: { perfil: "ALQUIMISTAS", concepto: "Una segunda oportunidad", ejemplo: "Transformas materiales comunes en objetos llenos de significado" },
+      AAB: { perfil: "ALQUIMISTAS", concepto: "Memorias reconstruidas", ejemplo: "Cada pieza conserva rastros del pasado pero adquiere una nueva forma" },
+      AAC: { perfil: "ALQUIMISTAS", concepto: "La belleza de la imperfección", ejemplo: "Las imperfecciones son lo que lo hacen hermoso y perfecto" },
+      ABA: { perfil: "ALQUIMISTAS", concepto: "Lo bueno, no termina nunca", ejemplo: "Creas objetos con alma y permanencia que perduran con los años" },
+      ABB: { perfil: "ALQUIMISTAS", concepto: "Lo bueno, no termina nunca", ejemplo: "Creas objetos con alma y permanencia que perduran con los años" },
+      ABC: { perfil: "ALQUIMISTAS", concepto: "El valor de lo hecho a mano", ejemplo: "La dedicación es parte de la experiencia" },
+      ACA: { perfil: "ALQUIMISTAS", concepto: "Piezas con historia", ejemplo: "Cada creación tiene una narrativa propia" },
+      ACB: { perfil: "ALQUIMISTAS", concepto: "Puedo mejorarlo", ejemplo: "Encuentras oportunidades de cambio en donde otros no ven valor" },
+      ACC: { perfil: "ALQUIMISTAS", concepto: "Experimentación consciente", ejemplo: "Transformas materiales en algo inesperado" },
+      BAA: { perfil: "ALQUIMISTAS", concepto: "Todo cambia", ejemplo: "No muere, solo se transforma y fluye" },
+      BAB: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Confía en el proceso", ejemplo: "Lo importante no es el resultado sino el camino que te tocó recorrer" },
+      BAC: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Hecho con paciencia", ejemplo: "En tus creaciones se demuestra la dedicación y el amor puesto" },
+      BBA: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Belleza irrepetible", ejemplo: "Las huellas humanas son lo que lo vuelven único" },
+      BBB: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Abrigo emocional", ejemplo: "Tus piezas hacen sentir acompañadas a las personas" },
+      BBC: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Objetos que conectan", ejemplo: "Lo creado con amor genera vínculos más fuertes" },
+      BCA: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Regalos con significado", ejemplo: "Cada objeto representa una emoción" },
+      BCB: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Detalles que inspiran", ejemplo: "Las pequeñas cosas generan grandes emociones" },
+      BCC: { perfil: "COLECCIONISTA DE HISTORIAS", concepto: "Crear y fluir", ejemplo: "Las ideas crecen lentamente y se expanden" },
+      CAA: { perfil: "EXPERIMENTORES", concepto: "El gabinete de curiosidades", ejemplo: "Tus piezas parecen descubrimientos únicos" },
+      CAB: { perfil: "EXPERIMENTORES", concepto: "Extrañamente hermoso", ejemplo: "Lo inusual es parte de tu atractivo." },
+      CAC: { perfil: "EXPERIMENTORES", concepto: "Caos con intención", ejemplo: "Experimentas sin miedo a romper reglas" },
+      CBA: { perfil: "EXPERIMENTORES", concepto: "Texturas inesperadas", ejemplo: "El tacto es parte fundamental de la experiencia" },
+      CBB: { perfil: "EXPERIMENTORES", concepto: "Jugar para descubrir", ejemplo: "La curiosidad guía tu proceso creativo" },
+      CBC: { perfil: "EXPERIMENTORES", concepto: "Lo que nunca habías visto", ejemplo: "Tus piezas sorprenden desde el primer vistazo" },
+      CCA: { perfil: "EXPERIMENTORES", concepto: "Universo versátil", ejemplo: "No encajas en una sola categoría y no te gusta que te limiten" },
+      CCB: { perfil: "EXPERIMENTORES", concepto: "No es un error, es arte", ejemplo: "Las mejores ideas aparecen cuando algo inesperado sucede" },
+      CCC: { perfil: "EXPERIMENTORES", concepto: "Rareza memorable", ejemplo: "Lo extraordinario se convierte en tu sello personal" }
+    };
+
+    const PREGUNTAS_FER = [
+      {
+        titulo: "1. ¿Qué disfrutas más al crear?",
+        opciones: [
+          { id: "A", texto: "Dar nueva vida a los materiales" },
+          { id: "B", texto: "Crear con paciencia y detalle" },
+          { id: "C", texto: "Experimentar con mis creaciones" }
+        ]
+      },
+      {
+        titulo: "2. ¿Cuál de estas texturas te representa más?",
+        opciones: [
+          { id: "A", imagen: "images/textura-1.png", alt: "Textura 1" },
+          { id: "B", imagen: "images/textura-2.png", alt: "Textura 2" },
+          { id: "C", imagen: "images/textura-3.png", alt: "Textura 3" }
+        ]
+      },
+      {
+        titulo: "3. ¿Qué objeto conservarías para siempre?",
+        opciones: [
+          { id: "A", texto: "Una libreta llena de bocetos" },
+          { id: "B", texto: "Un regalo hecho por alguien especial" },
+          { id: "C", texto: "Un objeto único en el mundo" }
+        ]
+      }
+    ];
+
+    let pasoActual = 0;
+    let respuestas = [];
+    let opcionSeleccionada = null;
+
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+
+    renderizarPaso();
+
+    function renderizarPaso() {
+      const dataPaso = PREGUNTAS_FER[pasoActual];
+      questionText.textContent = dataPaso.titulo;
+      optionsContainer.innerHTML = '';
+
+      /* Recuperar la respuesta guardada previamente si el usuario retrocede */
+      opcionSeleccionada = respuestas[pasoActual] || null;
+      btnNext.disabled = !opcionSeleccionada;
+
+      /* Gestionar visibilidad del botón Anterior */
+      if (pasoActual === 0) {
+        btnPrev.style.display = 'none';
+      } else {
+        btnPrev.style.display = 'block';
+      }
+
+      /* Gestionar texto del botón Siguiente / Terminar */
+      if (pasoActual === PREGUNTAS_FER.length - 1) {
+        btnNext.textContent = "TERMINAR";
+      } else {
+        btnNext.textContent = "SIGUIENTE";
+      }
+
+      dataPaso.opciones.forEach(opc => {
+        const card = document.createElement('div');
+        card.className = 'option-card';
+        if (opc.id === opcionSeleccionada) {
+          card.classList.add('selected');
+        }
+        card.onclick = () => seleccionarOpcion(card, opc.id);
+
+        if (opc.texto) {
+          card.innerHTML = `<p>${opc.texto}</p>`;
+        } else if (opc.imagen) {
+          card.innerHTML = `<img src="${opc.imagen}" alt="${opc.alt}">`;
+        }
+        optionsContainer.appendChild(card);
+      });
+    }
+
+    function seleccionarOpcion(cardElement, optionId) {
+      document.querySelectorAll('.option-card').forEach(el => el.classList.remove('selected'));
+      cardElement.classList.add('selected');
+      opcionSeleccionada = optionId;
+      btnNext.disabled = false;
+    }
+
+    function avanzarPregunta() {
+      if (!opcionSeleccionada) return;
+      
+      /* Guardar o actualizar la respuesta del paso actual en el array */
+      respuestas[pasoActual] = opcionSeleccionada;
+
+      if (pasoActual < PREGUNTAS_FER.length - 1) {
+        pasoActual++;
+        renderizarPaso();
+      } else {
+        mostrarResultado();
+      }
+    }
+
+    function retrocederPregunta() {
+      if (pasoActual > 0) {
+        pasoActual--;
+        renderizarPaso();
+      }
+    }
+
+    function mostrarResultado() {
+      const clave = respuestas.join('');
+      const resultado = FER_RESULTS[clave] || FER_RESULTS["AAA"];
+
+      quizScreen.style.display = 'none';
+      resultScreen.style.display = 'flex';
+
+      document.getElementById('res-concepto').textContent = resultado.concepto;
+      document.getElementById('res-ejemplo').textContent = resultado.ejemplo;
+      document.getElementById('res-perfil').textContent = resultado.perfil;
+    }
+
+    function reiniciarQuiz() {
+      pasoActual = 0;
+      respuestas = [];
+      opcionSeleccionada = null;
+      resultScreen.style.display = 'none';
+      quizScreen.style.display = 'flex';
+      renderizarPaso();
+    }
+  </script>
+</body>
+</html>

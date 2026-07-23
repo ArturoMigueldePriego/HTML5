@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPC! - Conoce a Orión</title>
+  <link rel="stylesheet" href="navbar.css">
+
+  <style>
+    /* Carga de Fuentes desde la carpeta local 'fonts/' */
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Unbounded';
+      src: url('fonts/Unbounded-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('fonts/Montserrat-Italic.ttf') format('truetype');
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    /* Reset y Estilos Base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #000000;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Layout Principal (Ancho unificado a 600px) */
+    .page-container {
+      width: 100%;
+      max-width: 600px;
+      background-color: #000000;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- SECCIÓN 1: Ficha Técnica (Rosa / Fucsia) --- */
+    .profile-card-section {
+      background-color: #e60067; /* Color rosa de Orión */
+      color: #000000;
+      padding: clamp(20px, 4vw, 24px) 20px clamp(25px, 5vw, 35px) 20px;
+      position: relative;
+      border-bottom: 3px solid #000000;
+    }
+
+    /* Header Superior interno */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(15px, 3vw, 20px);
+    }
+
+    .top-header h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.3rem, 4vw, 1.7rem);
+      font-weight: 900;
+      color: #ffffff;
+      -webkit-text-stroke: 1.5px #000000;
+      text-stroke: 1.5px #000000;
+    }
+
+    .btn-volver {
+      background-color: #ffffff;
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
+      padding: clamp(5px, 1.5vw, 6px) clamp(12px, 3vw, 18px);
+      border-radius: 20px;
+      text-decoration: none;
+      border: 2px solid #000000;
+      box-shadow: 2px 2px 0px #ffffff; /* Sombra blanca aplicada */
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-volver:hover {
+      transform: translateY(-2px);
+      box-shadow: 3px 3px 0px #ffffff;
+    }
+
+    /* Título y Subtítulo Ficha (Textos más grandes) */
+    .profile-title-group h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(2rem, 6vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1;
+      color: #000000;
+    }
+
+    .profile-title-group p {
+      font-style: italic;
+      font-size: clamp(1rem, 3.2vw, 1.25rem);
+      margin-top: 4px;
+      margin-bottom: clamp(15px, 4vw, 22px);
+      color: #000000;
+    }
+
+    /* Grid de Datos Personaje */
+    .profile-grid-container {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: clamp(10px, 3vw, 15px);
+      position: relative;
+      align-items: stretch;
+    }
+
+    .data-fields {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(12px, 3vw, 15px);
+      z-index: 2;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field-label {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.75rem, 2.4vw, 0.9rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #000000;
+    }
+
+    /* Cajas blancas estilo sticker con sombra dura (Textos aumentados) */
+    .sticker-box {
+      background-color: #ffffff;
+      border: 2.5px solid #000000;
+      border-radius: 8px;
+      padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 14px);
+      box-shadow: 3px 3px 0px #000000;
+      font-weight: 700;
+      font-size: clamp(0.85rem, 2.8vw, 1.05rem);
+      color: #000000;
+    }
+
+    .row-two-col {
+      display: flex;
+      gap: 10px;
+    }
+
+    .sticker-box ul {
+      list-style: none;
+    }
+
+    .sticker-box ul li::before {
+      content: "• ";
+    }
+
+    /* Columna Ilustración Orión Principal */
+    .character-column {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: -10px;
+    }
+
+    .nico-main-img {
+      width: 90%;
+      margin-left: -10%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .badge-metodo {
+      background-color: #ffffff;
+      border: 2.5px solid #000000;
+      border-radius: 10px;
+      padding: clamp(8px, 1.8vw, 10px) clamp(12px, 3vw, 18px);
+      box-shadow: 3px 3px 0px #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.75rem, 2.2vw, 0.85rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+      margin-top: -20px;
+      z-index: 3;
+      color: #000000;
+      text-align: center;
+    }
+
+    /* --- SECCIÓN 2: Historia (Fondo Negro) --- */
+    .history-section {
+      background-color: #000000;
+      padding: clamp(30px, 6vw, 40px) 20px clamp(15px, 3vw, 20px) 20px;
+      position: relative;
+    }
+
+    .history-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: clamp(16px, 4vw, 20px);
+      max-width: 90%;
+    }
+
+    .history-content {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .history-text {
+      font-size: clamp(0.82rem, 2.6vw, 0.95rem);
+      line-height: 1.45;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      color: #e0e0e0;
+    }
+
+    .chibi-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Chibi reflejado y más chico */
+    .chibi-img {
+      width: 75%;
+      height: auto;
+      transform: scaleX(-1);
+    }
+
+    /* Tag Ilustración / Aromaterapia */
+    .tag-ilustracion {
+      display: inline-block;
+      background-color: #e60067;
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      font-weight: 900;
+      padding: clamp(6px, 2vw, 8px) clamp(20px, 5vw, 25px);
+      margin-top: clamp(20px, 4vw, 30px);
+      border-radius: 0 8px 8px 0;
+      margin-left: -20px;
+    }
+
+    /* --- SECCIÓN 3: Call to Action (Footer) --- */
+    .cta-section {
+      background-color: #000000;
+      padding: clamp(25px, 5vw, 30px) 20px clamp(40px, 8vw, 50px) 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 900;
+      margin-bottom: clamp(20px, 4vw, 25px);
+      color: #ffffff;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .btn-iniciar {
+      background-color: #e60067;
+      color: #000000;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.1rem, 3.8vw, 1.5rem);
+      font-weight: 900;
+      text-decoration: none;
+      padding: clamp(10px, 2.5vw, 14px) clamp(25px, 6vw, 45px);
+      border: 3px solid #000000;
+      border-radius: 20px;
+      box-shadow: 4px 4px 0px #ffffff;
+      z-index: 2;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-iniciar:hover {
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0px #ffffff;
+    }
+
+    .btn-iniciar:active {
+      transform: translateY(1px);
+      box-shadow: 2px 2px 0px #ffffff;
+    }
+
+    /* NPC izquierdo reflejado */
+    .npc-left-img {
+      width: clamp(75px, 20vw, 100px);
+      height: auto;
+      transform: scaleX(-1);
+    }
+
+    /* Orión derecho reflejado y recortado a medio cuerpo */
+    .nico-right-container {
+      width: clamp(80px, 22vw, 110px);
+      height: clamp(100px, 28vw, 140px);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .nico-right-img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      object-position: top center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (FUERA DEL CONTENEDOR PARA OCUPAR TODA LA ANCHURA) -->
+    <header class="navbar">
+      <a href="index.html" class="brand-logo-link">
+        <img src="images/logo.png" alt="NPC! Logo" class="brand-logo-img">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="concepto.html">Concepto</a></li>
+          <li><a href="metodos.html">Métodos</a></li>
+          <li><a href="guias.html">Tu guía</a></li>
+        </ul>
+      </nav>
+    </header>
+
+
+    <!-- SECCIÓN 1: Ficha de Orión -->
+    <section class="profile-card-section">            
+      <!-- Top Bar interno -->
+      <div class="top-header">
+        <h1>Conoce a Orión</h1>
+        <a href="guias.html" class="btn-volver">Volver</a>
+      </div>
+
+      <!-- Saludo -->
+      <div class="profile-title-group">
+        <h2>Holi, llámame Orión</h2>
+        <p>Este soy yo</p>
+      </div>
+
+      <!-- Ficha de Datos Grid -->
+      <div class="profile-grid-container">            
+        <!-- Columna Datos -->
+        <div class="data-fields">                
+          <div class="field-group">
+            <span class="field-label">CARGO:</span>
+            <div class="sticker-box">VENDEDOR DE VELAS</div>
+          </div>
+
+          <div class="row-two-col">
+            <div class="field-group" style="flex: 1.3;">
+              <span class="field-label">GÉNERO:</span>
+              <div class="sticker-box">MASCULINO</div>
+            </div>
+            <div class="field-group" style="flex: 0.7;">
+              <span class="field-label">EDAD:</span>
+              <div class="sticker-box" style="text-align: center;">31</div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">LIKES:</span>
+            <div class="sticker-box">
+              <ul>
+                <li>LOS AROMAS</li>
+                <li>LEER LIBROS</li>
+                <li>EL MINDFULNESS</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">DISLIKES/MIEDOS:</span>
+            <div class="sticker-box">
+              <ul>
+                <li>VIVIR CON ESTRÉS</li>
+                <li>LOS MALOS OLORES</li>
+                <li>LOS RUIDOS</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Ilustración Orión + Método -->
+        <div class="character-column">
+          <img src="images/orion.png" alt="Orión Ilustración" class="nico-main-img">
+          <div class="badge-metodo">MÉTODO: STORYTELLING</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: Historia -->
+    <section class="history-section">
+      <h2 class="history-title">Mi historia antes de ser Orión</h2>
+      <div class="history-content">
+        <div class="history-text">
+          <p>Descubrí que las personas no recuerdan únicamente un producto, sino cómo las haces sentir.</p>
+          <p>Empecé a pensar en recuerdos, atmósferas y experiencias. Así encontré una idea que podía guiar toda mi marca.</p>
+          <p>Desde entonces, cada aroma cuenta una historia.</p>
+        </div>
+        <div class="chibi-wrapper">
+          <img src="images/orion-sticker.png" alt="Orión Chibi" class="chibi-img">
+        </div>
+      </div>
+      <div class="tag-ilustracion">Aromaterapia</div>
+    </section>
+
+    <!-- SECCIÓN 3: Footer CTA -->
+    <section class="cta-section">
+      <h2 class="cta-title">¿EMPEZAMOS?</h2>
+      <div class="cta-actions">
+        <img src="images/anfitrion-3.png" alt="NPC" class="npc-left-img">
+        <a href="orion-eval.html" class="btn-iniciar">INICIAR</a>
+        <div class="nico-right-container">
+          <img src="images/orion.png" alt="Orión Guiño" class="nico-right-img">
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
