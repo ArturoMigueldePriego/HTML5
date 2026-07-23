@@ -6,6 +6,9 @@
   <title>NPC! - Evaluación de Orión</title>
   <link rel="stylesheet" href="navbar.css">
   
+  <!-- Librería html2canvas para capturar la imagen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
   <style>
     /* Carga de Fuentes desde la carpeta local 'fonts/' */
     @font-face {
@@ -51,8 +54,16 @@
       font-style: italic;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --primary-color: #ff007a; /* Magenta Orión */ }
+    /* --- Reset y Estilos Base --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary-color: #ff007a; /* Rosado/Fucsia característico de Orión */
+    }
 
     html, body {
       width: 100%;
@@ -68,6 +79,7 @@
       min-height: 100vh;
     }
 
+    /* Layout Principal (Ancho unificado a 600px para consistencia) */
     .eval-wrapper {
       width: 100%;
       max-width: 600px;
@@ -78,6 +90,48 @@
       position: relative;
     }
 
+    /* --- BARRA DE NAVEGACIÓN SUPERIOR (NAVBAR) --- */
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+      width: 100%;
+      box-sizing: border-box;
+      border-bottom: 2px solid #000000;
+    }
+
+    .brand-logo-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .brand-logo-img {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(0.8rem, 3vw, 2rem);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Unbounded', sans-serif;
+      text-decoration: none;
+      color: #000000;
+      font-size: clamp(0.75rem, 2.2vw, 0.95rem);
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
     /* CONTENEDOR INTERNO DEL QUIZ */
     .eval-content {
       padding: 20px;
@@ -86,7 +140,10 @@
       flex: 1;
     }
 
-    .category-tag-container { margin-bottom: 20px; }
+    /* Tag de Categoría Superior */
+    .category-tag-container {
+      margin-bottom: 20px;
+    }
 
     .category-tag {
       display: inline-block;
@@ -101,6 +158,7 @@
       box-shadow: 2px 2px 0px #ffffff;
     }
 
+    /* --- ESTADOS DE PREGUNTAS --- */
     .quiz-container {
       display: flex;
       flex-direction: column;
@@ -117,7 +175,7 @@
       line-height: 1.2;
     }
 
-    /* Grid cambiado a 3 columnas horizontales */
+    /* Grid de Opciones adaptado a 3 columnas horizontales */
     .options-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -126,6 +184,7 @@
       margin-bottom: 30px;
     }
 
+    /* Tarjetas de Respuestas */
     .option-card {
       background-color: #000000;
       border: 2.5px solid #ffffff;
@@ -137,26 +196,27 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 130px;
+      min-height: 110px;
       transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
       box-shadow: 3px 3px 0px rgba(255, 255, 255, 0.2);
     }
 
-    .option-card p { 
-      font-size: clamp(0.7rem, 1.8vw, 0.85rem); 
-      font-weight: 600; 
-      line-height: 1.25; 
-    }
-    
-    .option-card img { 
-      max-width: 100%; 
-      max-height: 75px; 
-      height: auto; 
-      border-radius: 6px; 
-      object-fit: contain;
-      margin-bottom: 8px;
+    .option-card p {
+      font-size: clamp(0.75rem, 2vw, 0.9rem);
+      font-weight: 600;
+      line-height: 1.25;
     }
 
+    .option-card img {
+      max-width: 100%;
+      max-height: 75px;
+      height: auto;
+      border-radius: 6px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+
+    /* Opción Seleccionada */
     .option-card.selected {
       border: 3px solid var(--primary-color);
       box-shadow: 4px 4px 0px var(--primary-color);
@@ -165,74 +225,85 @@
     }
 
     /* Contenedor de Botones de Acción */
-    .action-btn-container { 
-      margin-top: auto; 
-      margin-bottom: 20px; 
+    .action-btn-container {
+      margin-top: auto;
+      margin-bottom: 20px;
       width: 100%;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .btn-action {
       background-color: var(--primary-color);
       color: #000000;
       font-family: 'Unbounded', sans-serif;
-      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-size: clamp(0.8rem, 2.2vw, 1rem);
       font-weight: 900;
-      padding: 12px 20px;
+      padding: 12px 14px;
       border: 2.5px solid #000000;
       border-radius: 16px;
       cursor: pointer;
       box-shadow: 4px 4px 0px #ffffff;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
       flex: 1;
-      max-width: 200px;
+      min-width: 120px;
+      max-width: 180px;
       text-align: center;
     }
 
-    .btn-action:hover { 
-      transform: translateY(-2px); 
-      box-shadow: 5px 5px 0px #ffffff; 
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0px #ffffff;
     }
-    
-    .btn-action:disabled { 
-      opacity: 0.4; 
-      cursor: not-allowed; 
-      transform: none; 
-      box-shadow: none; 
+
+    .btn-action:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
       border-color: #666666;
     }
 
-    /* Botón Secundario (Anterior / Rehacer) */
+    /* Botón Secundario */
     .btn-secondary {
       background-color: #000000;
       color: #ffffff;
       border: 2.5px solid #ffffff;
       box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.3);
     }
+
     .btn-secondary:hover {
       background-color: rgba(255, 255, 255, 0.1);
       box-shadow: 5px 5px 0px #ffffff;
     }
 
+    /* --- ESTADO DE RESULTADO --- */
     .result-container {
       display: none;
       flex-direction: column;
-      justify-content: center;
+      gap: 25px;
       align-items: center;
-      text-align: center;
       flex: 1;
-      padding: 20px 0;
-      gap: 15px;
+      padding: 15px 10px;
+      text-align: center;
+      background-color: #000000;
     }
 
-    .result-subtitle { 
-      font-size: clamp(1rem, 3vw, 1.2rem); 
-      font-weight: 600; 
-      color: #cccccc; 
+    .result-left {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
     }
-    
+
+    .result-subtitle {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-weight: 600;
+      color: #cccccc;
+    }
+
     .result-concept {
       font-family: 'Unbounded', sans-serif;
       font-size: clamp(1.8rem, 5vw, 2.4rem);
@@ -242,13 +313,38 @@
       text-shadow: 2px 2px 0px #000000;
     }
 
-    .result-example { 
-      font-size: clamp(0.95rem, 2.8vw, 1.1rem); 
-      line-height: 1.4; 
-      color: #dddddd; 
-      max-width: 90%; 
+    .result-example {
+      font-size: clamp(0.95rem, 2.8vw, 1.1rem);
+      line-height: 1.4;
+      color: #dddddd;
+      max-width: 90%;
+      margin: 0 auto;
     }
 
+    /* --- ESTILOS DE IMPRESIÓN (PDF) --- */
+    @media print {
+      .navbar, 
+      .category-tag-container, 
+      #quiz-screen, 
+      .action-btn-container {
+        display: none !important;
+      }
+      
+      .result-container {
+        display: flex !important;
+        padding: 0;
+      }
+
+      body, html, .eval-wrapper, .eval-content {
+        background-color: #000000 !important;
+        width: 100% !important;
+        height: 100% !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    /* Adaptación Pantallas Pequeñas */
     @media (max-width: 600px) {
       .eval-wrapper {
         max-width: 100vw;
@@ -262,8 +358,7 @@
 <body>
 
   <div class="eval-wrapper">
-
-    <!-- BARRA DE NAVEGACIÓN SUPERIOR (FUERA DEL CONTENEDOR PARA OCUPAR TODA LA ANCHURA) -->
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
     <header class="navbar">
       <a href="index.html" class="brand-logo-link">
         <img src="images/logo.png" alt="NPC! Logo" class="brand-logo-img">
@@ -277,36 +372,47 @@
       </nav>
     </header>
 
-
     <div class="eval-content">
+      <!-- Categoría -->
       <div class="category-tag-container">
         <span class="category-tag" id="category-name">Aromaterapia</span>
       </div>
 
+      <!-- PANTALLA DE PREGUNTAS -->
       <main class="quiz-container" id="quiz-screen">
         <h2 class="question-title" id="question-text">1. Elige una piedra ✨</h2>
-        <div class="options-grid" id="options-container"></div>
+        
+        <div class="options-grid" id="options-container">
+          <!-- Opciones renderizadas por JS -->
+        </div>
+
         <div class="action-btn-container">
           <button class="btn-action btn-secondary" id="btn-prev" onclick="retrocederPregunta()" style="display: none;">ANTERIOR</button>
           <button class="btn-action" id="btn-next" disabled onclick="avanzarPregunta()">SIGUIENTE</button>
         </div>
       </main>
 
+      <!-- PANTALLA DE RESULTADO FINAL -->
       <section class="result-container" id="result-screen">
-        <p class="result-subtitle">Tu concepto sería:</p>
-        <h1 class="result-concept" id="res-concepto">Refugio del bosque</h1>
-        <p class="result-example" id="res-ejemplo">Un lugar donde el ruido desaparece y puedes volver a ti</p>
-        
-        <div class="action-btn-container" style="margin-top: 20px;">
-          <button class="btn-action btn-secondary" onclick="reiniciarQuiz()">REHACER CONCEPTO</button>
+        <div class="result-left">
+          <p class="result-subtitle">Tu concepto sería:</p>
+          <h1 class="result-concept" id="res-concepto">Refugio del bosque</h1>
+          <p class="result-example" id="res-ejemplo">Un lugar donde el ruido desaparece y puedes volver a ti</p>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN EN RESULTADOS -->
+        <div class="action-btn-container" style="margin-top: 10px;">
+          <button class="btn-action btn-secondary" onclick="reiniciarQuiz()">REHACER</button>
+          <button class="btn-action btn-secondary" onclick="guardarComoImagen()">GUARDAR IMAGEN</button>
+          <button class="btn-action btn-secondary" onclick="window.print()">GUARDAR PDF</button>
           <a href="final.html" class="btn-action" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">FINALIZAR</a>
         </div>
       </section>
     </div>
-
   </div>
 
   <script>
+    /* 1. DICCIONARIO DE RESULTADOS DE ORIÓN */
     const ORION_RESULTS = {
       AAA: { concepto: "Refugio del bosque", ejemplo: "Un lugar donde el ruido desaparece y puedes volver a ti" },
       AAB: { concepto: "Camino en paz", ejemplo: "Los aromas acompañan momentos de claridad mental" },
@@ -337,6 +443,7 @@
       CCC: { concepto: "Memorias de tinta", ejemplo: "Cada aroma guarda una historia que merece ser recordada" }
     };
 
+    /* 2. PREGUNTAS Y OPCIONES DE ORIÓN */
     const PREGUNTAS_ORION = [
       {
         titulo: "1. Elige una piedra ✨",
@@ -364,10 +471,12 @@
       }
     ];
 
+    /* 3. ESTADO DEL QUIZ */
     let pasoActual = 0;
     let respuestas = [];
     let opcionSeleccionada = null;
 
+    /* Elementos del DOM */
     const questionText = document.getElementById('question-text');
     const optionsContainer = document.getElementById('options-container');
     const btnNext = document.getElementById('btn-next');
@@ -375,6 +484,7 @@
     const quizScreen = document.getElementById('quiz-screen');
     const resultScreen = document.getElementById('result-screen');
 
+    /* Cargar la pregunta inicial */
     renderizarPaso();
 
     function renderizarPaso() {
@@ -382,24 +492,25 @@
       questionText.textContent = dataPaso.titulo;
       optionsContainer.innerHTML = '';
 
-      /* Recuperar la respuesta guardada previamente si el usuario retrocede */
+      /* Recuperar respuesta previa si retrocede */
       opcionSeleccionada = respuestas[pasoActual] || null;
       btnNext.disabled = !opcionSeleccionada;
 
-      /* Gestionar visibilidad del botón Anterior */
+      /* Gestionar visibilidad de Anterior */
       if (pasoActual === 0) {
         btnPrev.style.display = 'none';
       } else {
         btnPrev.style.display = 'block';
       }
 
-      /* Gestionar texto del botón Siguiente / Terminar */
+      /* Gestionar texto Siguiente / Terminar */
       if (pasoActual === PREGUNTAS_ORION.length - 1) {
         btnNext.textContent = "TERMINAR";
       } else {
         btnNext.textContent = "SIGUIENTE";
       }
 
+      /* Generar tarjetas */
       dataPaso.opciones.forEach(opc => {
         const card = document.createElement('div');
         card.className = 'option-card';
@@ -430,8 +541,6 @@
 
     function avanzarPregunta() {
       if (!opcionSeleccionada) return;
-      
-      /* Guardar o actualizar la respuesta del paso actual en el array */
       respuestas[pasoActual] = opcionSeleccionada;
 
       if (pasoActual < PREGUNTAS_ORION.length - 1) {
@@ -467,6 +576,30 @@
       resultScreen.style.display = 'none';
       quizScreen.style.display = 'flex';
       renderizarPaso();
+    }
+
+    /* 4. FUNCIÓN PARA GUARDAR COMO IMAGEN (PNG) */
+    function guardarComoImagen() {
+      const elementoResultado = document.getElementById('result-screen');
+      
+      const botonesAccion = elementoResultado.querySelector('.action-btn-container');
+      botonesAccion.style.display = 'none';
+
+      html2canvas(elementoResultado, {
+        scale: 2,
+        backgroundColor: '#000000',
+        useCORS: true
+      }).then(canvas => {
+        botonesAccion.style.display = 'flex';
+
+        const enlace = document.createElement('a');
+        enlace.download = 'resultado-orion.png';
+        enlace.href = canvas.toDataURL('image/png');
+        enlace.click();
+      }).catch(error => {
+        console.error("Error al generar la imagen:", error);
+        botonesAccion.style.display = 'flex';
+      });
     }
   </script>
 </body>
